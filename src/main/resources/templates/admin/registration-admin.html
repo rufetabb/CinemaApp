@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" th:href="@{/login/fonts/material-icon/css/material-design-iconic-font-min.css}">
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Handlee&family=Nunito&display=swap}" rel="stylesheet">
+
+    <!-- Main css -->
+    <link th:href="@{/login/css/style.css}" rel="stylesheet" >
+    <!-- CSS only -->
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">-->
+
+</head>
+<body>
+<!-- Navbar Start -->
+<div class="container-fluid bg-light position-relative shadow">
+    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0 px-lg-5">
+        <a href="" class="navbar-brand font-weight-bold text-secondary" style="font-size: 50px;">
+            <i class="fa fa-ticket" aria-hidden="true"></i>
+            <span class="text-secondary">Admin Panel</span>
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between bg " id="navbarCollapse">
+            <div class="navbar-nav font-weight-bold mx-auto py-0">
+                <a th:href="@{/admin/}" class="nav-item nav-link active">Ana Menu</a>
+                <a th:href="@{/admin/film-add}" class="nav-item nav-link">Filmlər</a>
+                <a th:href="@{/admin/booking}" class="nav-item nav-link">Satışlar</a>
+                <a th:href="@{/admin/customers}" class="nav-item nav-link">Müştərilər</a>
+
+            </div>
+
+        </div>
+    </nav>
+</div>
+<!-- Navbar End -->
+<div class="main">
+    <!--    <div th:if="${param.success}">-->
+    <!--   <p class="alert alert-info" > </p>-->
+    <!--    </div>-->
+    <!-- Sign up form -->
+    <section class="signup">
+        <div class="container">
+            <div class="signup-content">
+                <div class="signup-form">
+                    <h2 class="form-title">Sign up</h2>
+                    <form th:action="@{/admin/add-admin}" th:object="${admin}"  method="POST"  class="register-form" id="register-form"  >
+                        <div th:if="${param.success}">
+                            <div class="alert alert-info">
+                                <p>Siz Uğurla qeydiyyatdan keçdiniz!</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <i class="zmdi zmdi-account material-icons-name"></i>
+                            <label for="name"></label>
+                            <input th:field="*{firstName}" type="text" name="firstName" class="form-control" id="name" placeholder="Ad" th:errorClass="is-invalid">
+                            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"  class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <i class="zmdi zmdi-account material-icons-name"></i>
+                            <label for="surname"></label>
+                            <input th:field="*{lastName}" type="text" name="lastName" class="form-control" id="surname" placeholder="Soyad" th:errorClass="is-invalid" >
+                            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback" ></div>
+                        </div>
+                        <div class="form-group">
+                            <i class="zmdi zmdi-email"></i>
+                            <label for="email"></label>
+                            <input th:field="*{email}"  type="email" name="email" class="form-control" id="email" placeholder="Email" th:errorClass="is-invalid">
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <i class="zmdi zmdi-lock"></i>
+                            <label for="password"></label>
+                            <input  th:field="*{password}" type="password" name="password" class="form-control" id="password" placeholder="Şifrə" th:errorClass="is-invalid" >
+                            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <i class="zmdi zmdi-lock-outline"></i>
+                            <label for="rPassword"></label>
+                            <input type="password" name="rPassword" class="form-control" id="rPassword" placeholder="Şifrəni təkrar edin" th:errorClass="is-invalid">
+                            <div th:if="${#fields.hasErrors('rPassword')}" th:errors="*{rPassword}" class="invalid-feedback"></div>
+                        </div>
+                        <!--                        <div class="form-group">-->
+                        <!--                            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />-->
+                        <!--                            <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>-->
+                        <!--                        </div>-->
+                        <div class="form-group form-button">
+                            <input type="submit" name="signin" id="signin" class="btn btn-info " value="Qeydiyyatdan keç"/>
+
+
+                        </div>
+
+                    </form>
+
+                    <div class="alert mt-sm-2" role="alert">
+
+
+                    </div>
+                </div>
+                <div class="signup-image">
+                    <figure><img th:src="@{/img/signup.jpg}" alt="sing up image"></figure>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- JS -->
+<script th:src="@{/login/vendor/jquery/jquery.min.js}"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+<!--<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
+<script th:src="@{/login/js/main.js}"></script>
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $('#signin').click(function () {-->
+<!--            let result = validation();-->
+<!--            if (!result) {-->
+<!--                return result;-->
+<!--            }-->
+<!--            var jsonSave = {-->
+<!--                firstName:"Salam",-->
+<!--                lastName: "Necesen",-->
+<!--                email: "ndd",-->
+<!--                password: "dsds123"-->
+
+<!--            }-->
+<!--            $.ajax({-->
+<!--                type: 'POST',-->
+<!--                contentType: "application/json",-->
+<!--                data: jsonSave,-->
+<!--                url: "/registration/add",-->
+<!--                success: function (data) {-->
+<!--                    alertUsing("Saved..",true)-->
+<!--                },-->
+<!--                error: function (err) {-->
+<!--                    console.log(err);-->
+<!--                    alert(err);-->
+<!--                }-->
+
+<!--            })-->
+<!--        })-->
+
+
+<!--        function validation() {-->
+<!--            b = true;-->
+<!--            var name = $('#name').val();-->
+<!--            var surname = $('#surname').val();-->
+<!--            var email = $('#email').val();-->
+<!--            var password = $('#password').val();-->
+<!--            if (name.length > 50 || name.length < 2) {-->
+<!--                alertUsing("ad ən azi 2 simvol olmalidir", false);-->
+<!--                b = false;-->
+<!--            } else if (surname.length > 50 || surname.length < 2) {-->
+<!--                alertUsing("soyad ən azi 2 simvol olmalidir", false);-->
+<!--                b = false;-->
+<!--            } else if (email.length == 0) {-->
+<!--                alertUsing("email hissəsi boş qoyula bilməz", false);-->
+<!--                b = false-->
+<!--            } else if (password.length < 8) {-->
+<!--                alertUsing("password hissəsi ən azı 8 simvol olmalidir ", false);-->
+<!--                b = false;-->
+<!--            }-->
+<!--            return b;-->
+
+
+<!--        }-->
+
+<!--        function alertUsing(text, flag) {-->
+
+<!--            var alert = $(".alert");-->
+
+<!--            if (flag) {-->
+<!--                alert.removeClass("alert-danger").addClass("alert-success");-->
+<!--            } else {-->
+<!--                alert.removeClass("alert-success").addClass("alert-danger");-->
+
+<!--            }-->
+
+<!--            alert.fadeIn(400);-->
+<!--            alert.css("display", "block");-->
+<!--            alert.text(text);-->
+<!--            setTimeout(function () {-->
+<!--                alert.fadeOut();-->
+<!--            }, 2000);-->
+
+<!--        }-->
+
+
+<!--    })-->
+<!--</script>-->
+</body>
+</html>
