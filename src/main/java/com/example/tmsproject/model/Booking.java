@@ -1,8 +1,11 @@
 package com.example.tmsproject.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +33,10 @@ public class Booking {
     private Double price;
     private String hall;
     private String customer;
+    @CreationTimestamp
+
+    @Column(name="created_date")
+    private Timestamp createdDate;
 
 
     public Booking(Date time, List<String> seatNo, Date date, String cinema, String movieName, Integer capacity, Double price, String hall) {

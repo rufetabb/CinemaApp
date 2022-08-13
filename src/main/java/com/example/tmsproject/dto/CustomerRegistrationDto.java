@@ -1,6 +1,7 @@
 package com.example.tmsproject.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
@@ -29,6 +30,12 @@ public class CustomerRegistrationDto {
     public CustomerRegistrationDto(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public CustomerRegistrationDto(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     public CustomerRegistrationDto() {
@@ -81,4 +88,5 @@ public class CustomerRegistrationDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

@@ -103,14 +103,6 @@
                 </a>
             </li>
             <li class="nav-item menu-items">
-                <a class="nav-link" th:href="@{/admin/shows}">
-              <span class="menu-icon">
-                <i class="mdi mdi-table-large"></i>
-              </span>
-                    <span class="menu-title">Göstərilir</span>
-                </a>
-            </li>
-            <li class="nav-item menu-items">
                 <a class="nav-link" th:href="@{/admin/booking}">
               <span class="menu-icon">
 <!--                <i class="mdi mdi-table-large"></i>-->
@@ -136,14 +128,6 @@
                   <i class="iconify" data-icon="clarity:users-line"></i>
               </span>
                     <span class="menu-title">Adminlər</span>
-                </a>
-            </li>
-            <li class="nav-item menu-items">
-                <a class="nav-link" th:href="@{/admin/registration}">
-              <span class="menu-icon">
-                <i class="mdi mdi-table-large"></i>
-              </span>
-                    <span class="menu-title">Qeydiyyat</span>
                 </a>
             </li>
             <li class="nav-item menu-items">
@@ -182,7 +166,7 @@
                 <div th:each="movie : ${movies}" style="background-color: #191c24;" class="card col-3 mt-3 ml-5 " >
                     <img class="img-thumbnail" th:src="@{'data:image/jpeg;base64,'+${movie.getFileImage()}}" height="280px"
                          alt=""/>
-                    <input id="movieId" type="hidden" th:value="${movie.movieId}"/>
+<!--                    <input id="movieId" type="hidden" th:value="${movie.movieId}"/>-->
 
                     <div class="card-body  mt-1">
                         <h5 class="card-title " th:text="${movie.movieName}"></h5>
@@ -199,7 +183,7 @@
             </div>
 
             <div id="formInput" class=" ml-5 bg-light  ">
-                <form th:action="@{/admin/save}" th:object="${movieD}" enctype="multipart/form-data" method="post">
+                <form th:action="@{/admin/save}" th:object="${movieD}" enctype="multipart/form-data"  method="post">
                     <div class="row d-flex justify-content-center">
                         <div class="col-3  pt-3">
                             <img th:src="@{/img/no-image.png}" alt="film image" id="changeImage">
@@ -207,30 +191,55 @@
 
                             <!--               <label>Choose film image</label>-->
 
-                            <input type="file" th:name="fileImage" id="fileImage" class="mt-1"
+                            <input type="file" th:field="*{multipartFile}" id="fileImage" class="mt-1"
                                    accept="image/png, image/jpeg" required/>
                         </div>
                         <div class="form-group form-values col-md-5 ml-5 pt-3">
                             <br>
                             <br>
                             <div class="form-group">
-                                <input th:name="mname" class="form-control" type="text"
+                                <input th:field="*{movieName}" class="form-control" type="text"
                                        placeholder="Film Name..." required/></div>
                             <div class="form-group">
                                 <label><h6>Film haqqında:</h6></label>
-                                <textarea th:name="mdetails" class="form-control" type="text"
+                                <textarea th:field="*{movieDetails}" class="form-control" type="text"
                                           required> </textarea>
                             </div>
                             <div class="form-group">
-                                <input th:name="mtrailer" class="form-control" type="text"
+                                <input th:field="*{movieTrailer}" class="form-control" type="text"
                                        placeholder="Film Trailer Link..." required/></div>
                             <div class="form-group"><label for="dateStart" style="color:black"><h6>Başlama Tarixi:</h6>
                             </label>
-                                <input th:name="mStartDate" class="form-control" id="dateStart" type="date" required/></div>
+                                <input type="date" th:field="*{bookOnStartDate}" class="form-control" id="dateStart"  required/></div>
                             <div class="form-group">
                                 <label for="dateFinish" style="color:black"><h6>Bitmə Tarixi:</h6></label>
                                 <br>
-                                <input th:name="mFinishDate" class="form-control" id="dateFinish" type="date" required/>
+                                <input type="date" th:field="*{bookOnFinishDate}" class="form-control" id="dateFinish"  required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="age" style="color:black"><h6>Yaş həddi:</h6></label>
+                                <br>
+                                <input th:field="*{age}" class="form-control" id="age" type="text" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="clock" style="color:black"><h6>Filimin saatı:</h6></label>
+                                <br>
+                                <input type="text"  th:field="*{clock}" class="form-control" id="clock"  required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="clock" style="color:black"><h6>Rejissor:</h6></label>
+                                <br>
+                                <input th:field="*{director}" class="form-control" id="director" type="text" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="actors" style="color:black"><h6>Aktiyorlar:</h6></label>
+                                <br>
+                                <input th:field="*{actors}" class="form-control" id="actors" type="text" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="type" style="color:black"><h6>Filimin Tipi:</h6></label>
+                                <br>
+                                <input th:field="*{type}" class="form-control" id="type" type="text" required/>
                             </div>
                             <div class="form-group form-submit">
                                 <input type="submit" class="btn btn-primary" value="Create">

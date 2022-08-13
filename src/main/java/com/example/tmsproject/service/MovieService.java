@@ -21,9 +21,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -32,55 +34,53 @@ public class MovieService {
     @Autowired
     private TheatreRepository theatreRepository;
 
-    public void saveMovie(MultipartFile multipartFile, String movieName, String details, String movieTrailer, String movieDate,String movieFinishDate) throws IOException, ParseException {
-        MovieDetails movieDetails = new MovieDetails();
-        movieDetails.setMovieName(movieName);
-        movieDetails.setMovieDetails(details);
-        movieDetails.setMovieTrailer(movieTrailer);
-        movieDetails.setFileImage(Base64.getEncoder().encodeToString(multipartFile.getBytes()));
-        movieDetails.setBookOnStartDate(new SimpleDateFormat("yyyy-MM-dd").parse(movieDate));
-        movieDetails.setBookOnFinishDate    (new SimpleDateFormat("yyyy-MM-dd").parse(movieFinishDate));
+    public void saveMovie(MovieDetailsDto movieDetailsDto) throws ParseException {
+
+
+       var movieDetails=MovieMapper.INSTANCE.dtoToEntity(movieDetailsDto);
         movieRepository.save(movieDetails);
     }
 
-    public MovieDetails getMovieId(Long id) {
-        return movieRepository.findById(id).get();
+    public MovieDetailsDto getMovieId(Long id) {
+        return MovieMapper.INSTANCE.entityToDto(movieRepository.findById(id).get());
     }
 
-    public List<MovieDetails> getAllMovie() {
-        return movieRepository.findAll();
+    public List<MovieDetailsDto> getAllMovie() {
+
+
+        return movieRepository.findAll()
+                .stream()
+                .map(movieDetails -> MovieMapper.INSTANCE.entityToDto(movieDetails))
+                .collect(Collectors.toList());
     }
 
-    public MovieDetails updateMovie(Long id, MultipartFile multipartFile,
-                                    String movieName,String movieDetails,
-                                    String movieTrailer,String movieDate,
-                                    String movieFinishDate) throws IOException, ParseException {
+    public void updateMovie(Long id,
+                                    MovieDetailsDto movieDetailsDto)  {
         var movieExists = movieRepository.existsById(id);
 
         if (!movieExists) new RuntimeException("movie not found");
         var movie = movieRepository.findById(id).get();
-          movie.setMovieName(movieName);
-          movie.setMovieDetails(movieDetails);
-          movie.setMovieTrailer(movieTrailer);
-          movie.setBookOnStartDate(new SimpleDateFormat("yyyy-MM-dd").parse(movieDate));
-          movie.setBookOnFinishDate(new SimpleDateFormat("yyyy-MM-dd").parse(movieFinishDate));
-          if(!multipartFile.isEmpty()) {
-              movie.setFileImage(Base64.getEncoder().encodeToString(multipartFile.getBytes()));
-          }
-          movieRepository.save(movie);
-        return movie;
+        if(movieDetailsDto.getFileImage()==null){
+            movieDetailsDto.setFileImage(movie.getFileImage());
+        }
+
+
+        var movieDetails=  MovieMapper.INSTANCE.dtoToEntity(movieDetailsDto);
+        movieRepository.save(movieDetails);
 
     }
-    public MovieDetails getMovie(Long id) throws IOException {
+    public MovieDetailsDto getMovie(Long id) throws IOException {
         var movieExists = movieRepository.existsById(id);
         if (!movieExists) new RuntimeException("movie not found");
         var movie = movieRepository.findById(id).get();
-        return movie;
+        var movieDto=  MovieMapper.INSTANCE.entityToDto(movie);
+        return movieDto;
 
     }
-    public List<MovieDetails> getAllMovieName(String name) throws IOException {
+    public List<MovieDetailsDto> getAllMovieName(String name) throws IOException {
         var movie = movieRepository.findByMovieName(name);
-        return movie;
+        var movieDto= movie.stream().map(movieDetails ->MovieMapper.INSTANCE.entityToDto(movieDetails) ).collect(Collectors.toList()) ;
+        return movieDto;
 
     }
 
@@ -90,11 +90,6 @@ public class MovieService {
         movieRepository.deleteById(id);
 
     }
-    public void saveTheatre(Theatre theatre){
-        theatreRepository.save(theatre);
 
-
-
-    }
 
 }

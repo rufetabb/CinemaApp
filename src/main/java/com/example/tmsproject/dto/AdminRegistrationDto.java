@@ -1,5 +1,6 @@
 package com.example.tmsproject.dto;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;

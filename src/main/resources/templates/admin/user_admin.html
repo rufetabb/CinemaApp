@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Film</title>
-    <link th:href="@{https://fonts.googleapis.com/css2?family=Handlee&family=Nunito&display=swap}"rel="stylesheet">
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Handlee&family=Nunito&display=swap}" rel="stylesheet">
     <link th:href="@{../css/all-import.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -100,14 +100,6 @@
                 </a>
             </li>
             <li class="nav-item menu-items">
-                <a class="nav-link" th:href="@{/admin/shows}">
-              <span class="menu-icon">
-                <i class="mdi mdi-table-large"></i>
-              </span>
-                    <span class="menu-title">Göstərilir</span>
-                </a>
-            </li>
-            <li class="nav-item menu-items">
                 <a class="nav-link" th:href="@{/admin/booking}">
               <span class="menu-icon">
 <!--                <i class="mdi mdi-table-large"></i>-->
@@ -136,14 +128,6 @@
                 </a>
             </li>
             <li class="nav-item menu-items">
-                <a class="nav-link" th:href="@{/admin/registration}">
-              <span class="menu-icon">
-                <i class="mdi mdi-table-large"></i>
-              </span>
-                    <span class="menu-title">Qeydiyyat</span>
-                </a>
-            </li>
-            <li class="nav-item menu-items">
                 <a class="nav-link" th:href="@{/logout}">
               <span class="menu-icon">
                     <i class="mdi mdi-logout text-danger"></i>
@@ -160,42 +144,107 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="mdi mdi-menu"></span>
                 </button>
-                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                        data-toggle="offcanvas">
                     <span class="mdi mdi-format-line-spacing"></span>
                 </button>
             </div>
         </nav>
 
         <div class="container  mt-5">
-            <h4 class="text-center text-primary mt-5">Adminlər</h4>
-            <hr >
-            <div class="table-responsive">
-                <table class=" table table-bordered  ">
-                    <thead>
-                    <tr>
-                        <th>Ad</th>
-                        <th>Soyad</th>
-                        <th>Email</th>
-                        <th>Şifrə</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="admin:${admins}">
-                        <td th:text="${admin.firstName}"></td>
-                        <td th:text="${admin.lastName}"></td>
-                        <td th:text="${admin.email}"></td>
-                        <td th:text="${admin.password}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class=" m-5  ">
+                <button id="addAdmin" class="btn btn-info mt-2">Admin Əlavə Et</button>
+                <button id="back" class="btn btn-info mt-2">Geri</button>
             </div>
-        </div>
+<div id="table-admin">
+    <h4 class="text-center text-primary mt-5">Adminlər</h4>
+    <hr>
+    <div class="table-responsive">
+        <table class=" table table-bordered  ">
+            <thead>
+            <tr>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>Email</th>
+                <th>Şifrə</th>
 
-
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="admin:${admins}">
+                <td th:text="${admin.firstName}"></td>
+                <td th:text="${admin.lastName}"></td>
+                <td th:text="${admin.email}"></td>
+                <td th:text="${admin.password}"></td>
+            </tr>
+            </tbody>
+        </table>
 
     </div>
+</div>
+            <div id="formInput" class=" ml-5 bg-light  ">
+                <form th:action="@{/admin/add-admin}" th:object="${admin}"   method="POST"
+                      enctype="multipart/form-data">
+                    <div class="row d-flex justify-content-center">
+                        <div class="form-group form-values col-md-5 ml-5 pt-3">
+                            <h3>Admin Əlavə Et</h3>
+                            <br>
+                            <br>
+                            <div class="form-group">
+                                <input th:field="*{firstName}" type="text" name="firstName" class="form-control"
+                                       id="name" placeholder="Ad"  th:errorClass="is-invalid" oninvalid="this.setCustomValidity('Adı daxil edin')"
+                                       oninput="this.setCustomValidity('')"
+                                       required="required" >
+                                <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"  class="invalid-feedback"></div>
 
+                            </div>
+                            <div class="form-group">
+                                <input th:field="*{lastName}" type="text" name="lastName" class="form-control"
+                                       id="surname" placeholder="Soyad" th:errorClass="is-invalid"
+                                       oninvalid="this.setCustomValidity('Soyadı daxil edin')"
+                                       oninput="this.setCustomValidity('')"
+                                       required="required">
+                                <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback" ></div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <input th:field="*{email}" type="email" name="email" class="form-control"
+                                       id="email" placeholder="Email" th:errorClass="is-invalid" oninvalid="this.setCustomValidity('Emaili daxil edin')"
+                                       oninput="this.setCustomValidity('')"
+                                       required="required"  >
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <input th:field="*{password}" type="password" name="password" class="form-control"
+                                       id="password" placeholder="Şifrə" th:errorClass="is-invalid" oninvalid="this.setCustomValidity('Şifrəni daxil edin')"
+                                       oninput="this.setCustomValidity('')"
+                                       required="required"  ></div>
+                            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+
+                            <div class="form-group">
+                                <input type="password" name="rPassword" class="form-control" id="rPassword"
+                                       placeholder="Şifrəni təkrar edin" th:errorClass="is-invalid"
+                                       oninvalid="this.setCustomValidity('Şifrəni təkrar daxil edin')"
+                                       oninput="this.setCustomValidity('')"
+                                       required="required"  >
+                                <div th:if="${#fields.hasErrors('rPassword')}" th:errors="*{rPassword}" class="invalid-feedback"></div>
+
+                            </div>
+                            <input type="hidden" id="error" th:value="${error}">
+                            <div class="form-group form-submit">
+                                <button th:onclick="message(${error})" type="submit" class="btn btn-primary"  >
+                                    Admin Əlavə Et
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 </div>
@@ -227,5 +276,6 @@
 <script th:src="@{../assets/js/misc.js}"></script>
 <script th:src="@{../assets/js/settings.js}"></script>
 <script th:src="@{../assets/js/todolist.js}"></script>
+<script th:inline="javascript" th:src="@{../js/form-admin.js}"></script>
 </body>
 </html>

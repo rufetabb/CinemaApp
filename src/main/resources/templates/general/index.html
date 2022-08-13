@@ -32,6 +32,10 @@
     <!-- CSS only -->
     <link th:href="@{/css/hover.image.css}" rel="stylesheet">
     <link th:href="@{/css/search-btn.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.0.96/css/materialdesignicons.min.css"
+          integrity="sha512-fXnjLwoVZ01NUqS/7G5kAnhXNXat6v7e3M9PhoMHOTARUMCaf5qNO84r5x9AFf5HDzm3rEZD8sb/n6dZ19SzFA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 
 <body>
@@ -57,14 +61,57 @@
                 <li sec:authorize="!isAuthenticated()">
                     <a th:href="@{/registration/}" class="nav-item nav-link">Qeydiyyat</a>
                 </li>
-                <li th:if="${#lists.contains(authorities,'ROLE_ADMIN')}">
-                    <a th:href="@{/admin/}" class="nav-item nav-link">Admin</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/logout}" class="nav-item nav-link">
-                        Çıxış
-                        <i class="fas fa-sign-out-alt ml-2" style="font-size:14px;color:red"></i>
+<!--                <li th:if="${#lists.contains(authorities,'ROLE_ADMIN')}">-->
+<!--                    <a th:href="@{/admin/}" class="nav-item nav-link">Admin</a>-->
+<!--                </li>-->
+<!--                <li sec:authorize="isAuthenticated()">-->
+                    <!--                    <a th:href="@{/logout}" class="nav-item nav-link">-->
+                    <!--                        Çıxış-->
+                    <!--                        <i class="fas fa-sign-out-alt ml-2" style="font-size:14px;color:red"></i>-->
+                    <!--                    </a>-->
+                    <!--                </li>-->
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                        <i class="mdi mdi-account-circle "></i>
+<!--                        Profil-->
+                      [[${user.firstName}]] [[${user.lastName}]]
+                        <i class="mdi mdi-menu-down "></i>
                     </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                         aria-labelledby="profileDropdown">
+                        <h6 class="p-3 mb-0">[[${user.firstName}]] [[${user.lastName}]]</h6>
+                        <h7 class="p-3 mb-0">[[${user.email}]] </h7>
+                        <div class="dropdown-divider"></div>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/customer-booking}"
+                           class="dropdown-item preview-item">
+                            <div class="preview-item-content">
+                                <i class="mdi mdi-settings text-success"></i>
+                                Biletlərim
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a th:if="${#lists.contains(authorities,'ROLE_ADMIN')}" th:href="@{/admin/}"
+                           class="dropdown-item preview-item">
+                            <div class="preview-item-content">
+                                <div class="preview-subject mb-1">
+                                    Admin Panel
+                                </div>
+
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="dropdown-item preview-item">
+                            <div class="preview-item-content">
+                                <div class="preview-subject mb-1">
+                                    Çıxış
+                                    <i class="fas fa-sign-out-alt ml-2" style="font-size:14px;color:red"></i>
+                                </div>
+
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <p class="p-3 mb-0 text-center">Xoş Gəlmişsiniz</p>
+                    </div>
                 </li>
             </div>
 
@@ -79,56 +126,56 @@
             <div class="container p-0">
                 <div class="text-center pb-2">
                 </div>
-                <div  class="owl-carousel testimonial-carousel">
+                <div class="owl-carousel testimonial-carousel">
                     <div th:each="movie : ${movies}" class="container-fluid hovereffect ">
-                        <a th:href="@{/buy-ticket/{id}(id=${movie.movieId})}" >
+                        <a th:href="@{/buy-ticket/{id}(id=${movie.movieId})}">
                             <img class="img-responsive"
-                             th:src="@{'data:image/jpeg;base64,'+${movie.getFileImage()}}"
-                                                                                     alt="Image">
-                        <div class="overlay">
-                            <h2 th:text="${movie.movieName}"></h2>
-                        </div>
+                                 th:src="@{'data:image/jpeg;base64,'+${movie.getFileImage()}}"
+                                 alt="Image">
+                            <div class="overlay">
+                                <h2 th:text="${movie.movieName}"></h2>
+                            </div>
                         </a>
 
 
                     </div>
-<!--                    <div class="container-fluid hovereffect ">-->
-<!--                        <img class="img-responsive"-->
-<!--                             th:src="@{https://upload.wikimedia.org/wikipedia/az/b/b5/H%C3%B6r%C3%BCm%C3%A7%C9%99k_Adam_Ev%C9%99_D%C3%B6n%C3%BC%C5%9F_Yoxdur.jpg}"-->
-<!--                             alt="Image">-->
+                    <!--                    <div class="container-fluid hovereffect ">-->
+                    <!--                        <img class="img-responsive"-->
+                    <!--                             th:src="@{https://upload.wikimedia.org/wikipedia/az/b/b5/H%C3%B6r%C3%BCm%C3%A7%C9%99k_Adam_Ev%C9%99_D%C3%B6n%C3%BC%C5%9F_Yoxdur.jpg}"-->
+                    <!--                             alt="Image">-->
 
-<!--                        <div class="overlay">-->
-<!--                            <h2>Spiderman no way home</h2>-->
-<!--                        </div>-->
-
-
-<!--                    </div>-->
-<!--                    <div class="container-fluid hovereffect">-->
-<!--                        <img class="img-responsive "-->
-<!--                             th:src="@{https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_.jpg}"-->
-<!--                             alt="Image">-->
-<!--                        <div class="overlay">-->
-<!--                            <h2>Avengers Endgame</h2>-->
-<!--                        </div>-->
+                    <!--                        <div class="overlay">-->
+                    <!--                            <h2>Spiderman no way home</h2>-->
+                    <!--                        </div>-->
 
 
-<!--                    </div>-->
-<!--                    <div class="container-fluid hovereffect ">-->
-<!--                        <img class="img-responsive " th:src="@{/img/thor.jpg}" alt="Image">-->
-<!--                        <div class="overlay">-->
-<!--                            <h2>Thor Love and Thunder</h2>-->
-<!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="container-fluid hovereffect">-->
+                    <!--                        <img class="img-responsive "-->
+                    <!--                             th:src="@{https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_.jpg}"-->
+                    <!--                             alt="Image">-->
+                    <!--                        <div class="overlay">-->
+                    <!--                            <h2>Avengers Endgame</h2>-->
+                    <!--                        </div>-->
 
 
-<!--                    </div>-->
-<!--                    <div class="container-fluid hovereffect ">-->
-<!--                        <img class="img-responsive" th:src="@{/img/dr_.jpg}" alt="Image">-->
-<!--                        <div class="overlay">-->
-<!--                            <h2>Dr.Strange Multiverse of Madness</h2>-->
-<!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="container-fluid hovereffect ">-->
+                    <!--                        <img class="img-responsive " th:src="@{/img/thor.jpg}" alt="Image">-->
+                    <!--                        <div class="overlay">-->
+                    <!--                            <h2>Thor Love and Thunder</h2>-->
+                    <!--                        </div>-->
 
 
-<!--                    </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="container-fluid hovereffect ">-->
+                    <!--                        <img class="img-responsive" th:src="@{/img/dr_.jpg}" alt="Image">-->
+                    <!--                        <div class="overlay">-->
+                    <!--                            <h2>Dr.Strange Multiverse of Madness</h2>-->
+                    <!--                        </div>-->
+
+
+                    <!--                    </div>-->
 
                 </div>
             </div>
@@ -146,24 +193,24 @@
     </div>
 </div>
 <div class="container-fluid ml-5 mt-3 row ">
-<!--    <div class=" card col-2 ml-5  ">-->
-<!--        <form method="get">-->
-<!--            <div class="view overlay">-->
-<!--                <img class="img-fluid " th:src="@{/img/dr.jpg}" height="280px" alt=""/>-->
-<!--                <div class="mask flex-center rgba-red-strong">-->
-<!--                    <p class="white-text">Strong overlay</p>-->
-<!--                </div>-->
+    <!--    <div class=" card col-2 ml-5  ">-->
+    <!--        <form method="get">-->
+    <!--            <div class="view overlay">-->
+    <!--                <img class="img-fluid " th:src="@{/img/dr.jpg}" height="280px" alt=""/>-->
+    <!--                <div class="mask flex-center rgba-red-strong">-->
+    <!--                    <p class="white-text">Strong overlay</p>-->
+    <!--                </div>-->
 
-<!--            </div>-->
+    <!--            </div>-->
 
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Dr.Strange Multiverse of Madness</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Dr.Strange Multiverse of Madness</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
 
 
-<!--    </div>-->
+    <!--    </div>-->
 
     <div th:each="movie : ${movies}" class="card col-2  ml-5 mt-3">
         <form method="get">
@@ -176,78 +223,78 @@
     </div>
 
 
-<!--    <div class=" card col-2  ml-5 ">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/fantasticBSTS.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Fantastic Beasts:The Secrets of Dumbledore</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class=" card col-2  ml-5">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/jurassicWrld.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Jurassic World</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class=" card col-2  mt-3 ml-5 ">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/morbius.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Morbius</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class=" card col-2 mt-3  ml-5">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/redNTC.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Red Notice</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class=" card col-2 mt-3 ml-5 ">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/sonic.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Sonic the Hedgehog 2</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class=" card col-2 mt-3 ml-5">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/spdr.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Spiderman no way home </h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class=" card col-2  mt-3 ml-5 ">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/ttw.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">The Tomorrow War</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class=" card col-2  mt-3 ml-5 ">-->
-<!--        <form method="get">-->
-<!--            <img th:src="@{/img/mortal-kombat.jpg}" height="280px" alt=""/>-->
-<!--            <div class="card-body mt-1">-->
-<!--                <h5 class="card-title">Mortal Kombat</h5>-->
-<!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
+    <!--    <div class=" card col-2  ml-5 ">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/fantasticBSTS.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Fantastic Beasts:The Secrets of Dumbledore</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
+    <!--    <div class=" card col-2  ml-5">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/jurassicWrld.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Jurassic World</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
+    <!--    <div class=" card col-2  mt-3 ml-5 ">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/morbius.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Morbius</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
+    <!--    <div class=" card col-2 mt-3  ml-5">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/redNTC.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Red Notice</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
+    <!--    <div class=" card col-2 mt-3 ml-5 ">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/sonic.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Sonic the Hedgehog 2</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
+    <!--    <div class=" card col-2 mt-3 ml-5">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/spdr.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Spiderman no way home </h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
+    <!--    <div class=" card col-2  mt-3 ml-5 ">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/ttw.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">The Tomorrow War</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
+    <!--    <div class=" card col-2  mt-3 ml-5 ">-->
+    <!--        <form method="get">-->
+    <!--            <img th:src="@{/img/mortal-kombat.jpg}" height="280px" alt=""/>-->
+    <!--            <div class="card-body mt-1">-->
+    <!--                <h5 class="card-title">Mortal Kombat</h5>-->
+    <!--                <button class="btn btn-primary" type="submit" name="movieName">Book now</button>-->
+    <!--            </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
 
 </div>
 
@@ -306,20 +353,21 @@
                 <a class="text-white mb-2" th:href="@{/films}"><i class="fa fa-angle-right mr-2"></i>Filimlər</a>
                 <a class="text-white mb-2" th:href="@{/trailer}"><i class="fa fa-angle-right mr-2"></i>Treyler</a>
                 <div sec:authorize="!isAuthenticated()">
-                <a class="text-white mb-2" th:href="@{/login}"><i class="fa fa-angle-right mr-2"></i>Login</a>
+                    <a class="text-white mb-2" th:href="@{/login}"><i class="fa fa-angle-right mr-2"></i>Login</a>
                 </div>
                 <div sec:authorize="!isAuthenticated()">
-                <a class="text-white mb-2" th:href="@{/registration/}"><i class="fa fa-angle-right mr-2"></i>Qeydiyyat</a>
+                    <a class="text-white mb-2" th:href="@{/registration/}"><i class="fa fa-angle-right mr-2"></i>Qeydiyyat</a>
                 </div>
                 <a class="text-white" th:href="@{/contact}"><i class="fa fa-angle-right mr-2"></i>Bizimlə Əlaqə</a>
             </div>
         </div>
-<!--        <div >-->
+        <!--        <div >-->
         <div sec:authorize="!isAuthenticated()" class="col-lg-3 col-md-6 mb-5">
             <h3 class="text-primary mb-4">Sing in</h3>
             <form th:action="@{/login}" th:method="post">
                 <div class="form-group">
-                    <input type="username" class="form-control border-0 py-4" placeholder="Username daxil edin" required="required"/>
+                    <input type="username" class="form-control border-0 py-4" placeholder="Username daxil edin"
+                           required="required"/>
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control border-0 py-4" placeholder="Şifrəni daxil edin"
@@ -330,7 +378,7 @@
                 </div>
             </form>
         </div>
-<!--        </div>-->
+        <!--        </div>-->
     </div>
     <div class="container-fluid pt-5" style="border-top: 1px solid rgba(23, 162, 184, .2);;">
         <p class="m-0 text-center text-dark">

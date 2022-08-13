@@ -32,6 +32,10 @@
     <!-- CSS only -->
     <link th:href="@{/css/hover.image.css}" rel="stylesheet">
     <link th:href="@{/css/search-btn.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.0.96/css/materialdesignicons.min.css"
+          integrity="sha512-fXnjLwoVZ01NUqS/7G5kAnhXNXat6v7e3M9PhoMHOTARUMCaf5qNO84r5x9AFf5HDzm3rEZD8sb/n6dZ19SzFA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 
 <body>
@@ -57,14 +61,57 @@
                 <li sec:authorize="!isAuthenticated()">
                     <a th:href="@{/registration/}" class="nav-item nav-link">Qeydiyyat</a>
                 </li>
-                <li th:if="${#lists.contains(authorities,'ROLE_ADMIN')}">
-                    <a th:href="@{/admin/}" class="nav-item nav-link">Admin</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/logout}" class="nav-item nav-link">
-                        Çıxış
-                        <i class="fas fa-sign-out-alt ml-2" style="font-size:14px;color:red"></i>
+                <!--                <li th:if="${#lists.contains(authorities,'ROLE_ADMIN')}">-->
+                <!--                    <a th:href="@{/admin/}" class="nav-item nav-link">Admin</a>-->
+                <!--                </li>-->
+                <!--                <li sec:authorize="isAuthenticated()">-->
+                <!--                    <a th:href="@{/logout}" class="nav-item nav-link">-->
+                <!--                        Çıxış-->
+                <!--                        <i class="fas fa-sign-out-alt ml-2" style="font-size:14px;color:red"></i>-->
+                <!--                    </a>-->
+                <!--                </li>-->
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                        <i class="mdi mdi-account-circle "></i>
+                        <!--                        Profil-->
+                        [[${user.firstName}]] [[${user.lastName}]]
+                        <i class="mdi mdi-menu-down "></i>
                     </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                         aria-labelledby="profileDropdown">
+                        <h6 class="p-3 mb-0">[[${user.firstName}]] [[${user.lastName}]]</h6>
+                        <h7 class="p-3 mb-0">[[${user.email}]] </h7>
+                        <div class="dropdown-divider"></div>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/customer-booking}"
+                           class="dropdown-item preview-item">
+                            <div class="preview-item-content">
+                                <i class="mdi mdi-settings text-success"></i>
+                                Biletlərim
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a th:if="${#lists.contains(authorities,'ROLE_ADMIN')}" th:href="@{/admin/}"
+                           class="dropdown-item preview-item">
+                            <div class="preview-item-content">
+                                <div class="preview-subject mb-1">
+                                    Admin Panel
+                                </div>
+
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="dropdown-item preview-item">
+                            <div class="preview-item-content">
+                                <div class="preview-subject mb-1">
+                                    Çıxış
+                                    <i class="fas fa-sign-out-alt ml-2" style="font-size:14px;color:red"></i>
+                                </div>
+
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <p class="p-3 mb-0 text-center">Xoş Gəlmişsiniz</p>
+                    </div>
                 </li>
             </div>
 
@@ -78,7 +125,7 @@
 <!--Body start-->
 
 <div class="container-fluid ml-5 mt-3 row ">
-<div class="container text-center ">
+<div class="container  text-center ">
     <table class="table table-bordered table-responsive-md table-striped mt-5">
 
         <tbody >

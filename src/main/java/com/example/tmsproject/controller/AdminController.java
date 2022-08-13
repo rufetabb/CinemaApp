@@ -1,13 +1,11 @@
 package com.example.tmsproject.controller;
 
 import com.example.tmsproject.dto.AdminRegistrationDto;
-import com.example.tmsproject.model.ShowTime;
+import com.example.tmsproject.dto.MovieDetailsDto;
+import com.example.tmsproject.dto.TheatreDto;
 import com.example.tmsproject.model.Theatre;
-import com.example.tmsproject.repository.DateRepository;
-import com.example.tmsproject.repository.TheatreRepository;
 import com.example.tmsproject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,19 +17,18 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Base64;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
      @Autowired
-    private CustomerServiceImp userService;
+    private CustomerService userService;
     @Autowired
     private MovieService movieService;
     @Autowired
     private TheatreService theatreService;
     @Autowired
-    private DateService dateService;
+    private ShowTimeService showTimeService;
     @Autowired
     private BookingService bookingService;
 
@@ -53,8 +50,8 @@ public class AdminController {
     }
 
     @PostMapping("/add-admin")
-    public String registerAdminAccount(@Valid @ModelAttribute("admin") AdminRegistrationDto adminRegistrationDto, BindingResult bindingResult){
-
+    public String registerAdminAccount(@Valid @ModelAttribute("admin") AdminRegistrationDto adminRegistrationDto, BindingResult bindingResult,Model model){
+        model.addAttribute("admins",userService.allAdmin());
         if(userService.userExists(adminRegistrationDto.getEmail())){
             bindingResult.addError(new FieldError("admin","email","Email istifadə edilmişdir"));
         }
@@ -64,28 +61,27 @@ public class AdminController {
             }
         }
         if(bindingResult.hasErrors()){
-            return "/admin/registration-admin";
+            model.addAttribute("error","error");
+            return "/admin/user_admin";
         }else
+            model.addAttribute("error","success");
             userService.save(adminRegistrationDto);
-        return "redirect:/admin/registration?success";
+        return "redirect:/admin/admin-user?success";
     }
     @GetMapping("/film-add")
     public String filmAdd(Model model) {
         var movies = movieService.getAllMovie();
         model.addAttribute("movies", movies);
+        model.addAttribute("movieD", new MovieDetailsDto());
 
         return "/admin/film-add";
     }
 
 
     @PostMapping("/save")
-    public String Save(@RequestParam("fileImage") MultipartFile multipartFile,
-                       @RequestParam("mname") String movieName,
-                       @RequestParam("mdetails") String movieDetails,
-                       @RequestParam("mtrailer")  String movieTrailer,
-                       @RequestParam("mStartDate") String movieDate,
-                       @RequestParam("mFinishDate") String movieFinishDate) throws IOException, ParseException {
-        movieService.saveMovie(multipartFile,movieName,movieDetails,movieTrailer,movieDate,movieFinishDate);
+    public String save(@ModelAttribute("movieD") MovieDetailsDto movieDetailsDto) throws ParseException {
+
+        movieService.saveMovie(movieDetailsDto);
         return "redirect:/admin/film-add";
     }
     @GetMapping("/edit/{id}")
@@ -95,14 +91,9 @@ public class AdminController {
         return "/admin/update";
     }
     @PostMapping("/update/{id}")
-    public String updateEmployee(Model model,@PathVariable Long id,
-                                 @RequestParam("file") MultipartFile multipartFile,
-                                 @RequestParam("mname") String movieName,
-                                 @RequestParam("mdetails") String movieDetails,
-                                 @RequestParam("mtrailer")  String movieTrailer,
-                                 @RequestParam("mStartDate") String movieDate,
-                                 @RequestParam("mFinishDate") String movieFinishDate) throws IOException, ParseException {
-        var movie = movieService.updateMovie(id,multipartFile,movieName,movieDetails,movieTrailer,movieDate,movieFinishDate);
+    public String updateEmployee(@PathVariable Long id,
+                                 @ModelAttribute("movieD") MovieDetailsDto movieDetailsDto)  {
+       movieService.updateMovie(id,movieDetailsDto);
 
         return "redirect:/admin/film-add";
     }
@@ -128,7 +119,7 @@ public class AdminController {
     public String filmConfigById(@PathVariable Long id, Model model) throws IOException {
         var movie=movieService.getMovieId(id);
         var movies=movieService.getAllMovie();
-        model.addAttribute("showTimes",dateService.getAllMovieForName(movie.getMovieName()));
+        model.addAttribute("showTimes", showTimeService.getAllMovieForName(movie.getMovieName()));
         model.addAttribute("mDetail",movie);
         model.addAttribute("mDetails",movies);
         model.addAttribute("thDetails",theatreService.getAllTheatre());
@@ -142,14 +133,14 @@ public class AdminController {
                              @RequestParam("scinema") String cinema,
                              @RequestParam("sdate") String date,
                              @RequestParam("sthName") String name) throws ParseException {
-        dateService.saveShowTime(time,cinema,date,name);
+        showTimeService.saveShowTime(time,cinema,date,name);
         return "redirect:/admin/film-config/"+id;
 
     }
 
     @PostMapping("/save-theatre")
-    public String movieSave(@ModelAttribute("theatre")Theatre theatre)  {
-        movieService.saveTheatre(theatre);
+    public String movieSave(@ModelAttribute("theatre") TheatreDto theatre)  {
+       theatreService.saveTheatre(theatre);
         return "redirect:/admin/theatre";
     }
     @GetMapping("/booking")
@@ -167,8 +158,11 @@ public class AdminController {
     @GetMapping("/admin-user")
     public String adminUser(Model model) {
         model.addAttribute("admins",userService.allAdmin());
+        model.addAttribute("admin",new AdminRegistrationDto());
         return "/admin/user_admin";
 
+
     }
+
 
 }

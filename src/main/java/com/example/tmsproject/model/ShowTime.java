@@ -30,11 +30,6 @@ public class ShowTime {
     private Date date;
     private String cinema;
     private String movieName;
-    @Temporal(value= TemporalType.DATE)
-    @Column(name = "book_on_date")
-    private java.util.Date bookOnStartDate;
-    @Temporal(value=TemporalType.DATE)
-    @Column(name = "book_on_finish_date")
-    private java.util.Date bookOnFinishDate;
+
 
 }
